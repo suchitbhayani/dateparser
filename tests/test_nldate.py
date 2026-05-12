@@ -27,6 +27,17 @@ def test_yesterday() -> None:
     assert parse("yesterday", today=TODAY) == date(2025, 6, 3)
 
 
+def test_the_day_after_tomorrow() -> None:
+    assert parse("the day after tomorrow", today=TODAY) == date(2025, 6, 6)
+    assert parse("day after tomorrow", today=TODAY) == date(2025, 6, 6)
+    assert parse("THE DAY AFTER TOMORROW", today=TODAY) == date(2025, 6, 6)
+
+
+def test_the_day_before_yesterday() -> None:
+    assert parse("the day before yesterday", today=TODAY) == date(2025, 6, 2)
+    assert parse("day before yesterday", today=TODAY) == date(2025, 6, 2)
+
+
 # ---------------------------------------------------------------------------
 # Absolute / ISO dates
 # ---------------------------------------------------------------------------

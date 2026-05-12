@@ -136,6 +136,8 @@ def _apply_delta(base: date, amount: int, unit: str, direction: int) -> date:
 # ---------------------------------------------------------------------------
 
 _ANCHOR_RE = re.compile(r"^(today|tomorrow|yesterday|now)$", re.I)
+_DAY_AFTER_TOMORROW_RE = re.compile(r"^(?:the\s+)?day\s+after\s+tomorrow$", re.I)
+_DAY_BEFORE_YESTERDAY_RE = re.compile(r"^(?:the\s+)?day\s+before\s+yesterday$", re.I)
 _ISO_RE = re.compile(r"^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$")
 _NAMED_DATE1_RE = re.compile(
     r"^(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+),?\s*(\d{4})?$", re.I
@@ -214,6 +216,11 @@ def _parse_inner(s: str, today: date) -> date | None:
         if s.lower() in ("today", "now"):
             return today
         return today + timedelta(days=1 if s.lower() == "tomorrow" else -1)
+
+    if _DAY_AFTER_TOMORROW_RE.match(s):
+        return today + timedelta(days=2)
+    if _DAY_BEFORE_YESTERDAY_RE.match(s):
+        return today - timedelta(days=2)
 
     if res := _try_iso(s):
         return res
