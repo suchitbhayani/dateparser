@@ -8,26 +8,72 @@ from datetime import date, timedelta
 # ---------------------------------------------------------------------------
 
 WEEKDAYS = {
-    "monday": 0, "tuesday": 1, "wednesday": 2, "thursday": 3,
-    "friday": 4, "saturday": 5, "sunday": 6,
-    "mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6,
+    "monday": 0,
+    "tuesday": 1,
+    "wednesday": 2,
+    "thursday": 3,
+    "friday": 4,
+    "saturday": 5,
+    "sunday": 6,
+    "mon": 0,
+    "tue": 1,
+    "wed": 2,
+    "thu": 3,
+    "fri": 4,
+    "sat": 5,
+    "sun": 6,
 }
 
 MONTHS = {
-    "january": 1, "february": 2, "march": 3, "april": 4,
-    "may": 5, "june": 6, "july": 7, "august": 8,
-    "september": 9, "october": 10, "november": 11, "december": 12,
-    "jan": 1, "feb": 2, "mar": 3, "apr": 4,
-    "jun": 6, "jul": 7, "aug": 8,
-    "sep": 9, "oct": 10, "nov": 11, "dec": 12,
+    "january": 1,
+    "february": 2,
+    "march": 3,
+    "april": 4,
+    "may": 5,
+    "june": 6,
+    "july": 7,
+    "august": 8,
+    "september": 9,
+    "october": 10,
+    "november": 11,
+    "december": 12,
+    "jan": 1,
+    "feb": 2,
+    "mar": 3,
+    "apr": 4,
+    "jun": 6,
+    "jul": 7,
+    "aug": 8,
+    "sep": 9,
+    "oct": 10,
+    "nov": 11,
+    "dec": 12,
 }
 
 WORD_TO_INT: dict[str, int] = {
-    "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
-    "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
-    "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14,
-    "fifteen": 15, "sixteen": 16, "seventeen": 17, "eighteen": 18,
-    "nineteen": 19, "twenty": 20, "a": 1, "an": 1,
+    "zero": 0,
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
+    "thirteen": 13,
+    "fourteen": 14,
+    "fifteen": 15,
+    "sixteen": 16,
+    "seventeen": 17,
+    "eighteen": 18,
+    "nineteen": 19,
+    "twenty": 20,
+    "a": 1,
+    "an": 1,
 }
 
 
@@ -107,19 +153,13 @@ _NAMED_DATE2_RE = re.compile(
 )
 
 # "next Tuesday" / "last Friday" / "this Wednesday"
-_RELATIVE_WEEKDAY_RE = re.compile(
-    r"^(next|last|this)\s+([a-z]+)$", re.I
-)
+_RELATIVE_WEEKDAY_RE = re.compile(r"^(next|last|this)\s+([a-z]+)$", re.I)
 
 # "in 3 days" / "in two weeks"
-_IN_N_UNITS_RE = re.compile(
-    r"^in\s+(\w+)\s+(days?|weeks?|months?|years?)$", re.I
-)
+_IN_N_UNITS_RE = re.compile(r"^in\s+(\w+)\s+(days?|weeks?|months?|years?)$", re.I)
 
 # "3 days ago" / "two weeks ago"
-_N_UNITS_AGO_RE = re.compile(
-    r"^(\w+)\s+(days?|weeks?|months?|years?)\s+ago$", re.I
-)
+_N_UNITS_AGO_RE = re.compile(r"^(\w+)\s+(days?|weeks?|months?|years?)\s+ago$", re.I)
 
 # "3 days from now/today/tomorrow/yesterday"
 _N_UNITS_FROM_RE = re.compile(
@@ -308,6 +348,7 @@ def _parse_inner(s: str, today: date) -> date | None:
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
+
 
 def parse(s: str, today: date | None = None) -> date:
     """

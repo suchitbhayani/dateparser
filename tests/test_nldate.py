@@ -14,6 +14,7 @@ TODAY = date(2025, 6, 4)
 # Anchors
 # ---------------------------------------------------------------------------
 
+
 def test_today() -> None:
     assert parse("today", today=TODAY) == TODAY
 
@@ -29,6 +30,7 @@ def test_yesterday() -> None:
 # ---------------------------------------------------------------------------
 # Absolute / ISO dates
 # ---------------------------------------------------------------------------
+
 
 def test_iso_date() -> None:
     assert parse("2025-12-01", today=TODAY) == date(2025, 12, 1)
@@ -56,6 +58,7 @@ def test_month_day_no_year_defaults_to_current_year() -> None:
 # ---------------------------------------------------------------------------
 
 # TODAY is Wednesday (weekday=2)
+
 
 def test_next_tuesday() -> None:
     # Next Tue from Wed 2025-06-04 → 2025-06-10
@@ -86,6 +89,7 @@ def test_this_friday() -> None:
 # Relative periods
 # ---------------------------------------------------------------------------
 
+
 def test_next_week() -> None:
     assert parse("next week", today=TODAY) == date(2025, 6, 11)
 
@@ -105,6 +109,7 @@ def test_last_year() -> None:
 # ---------------------------------------------------------------------------
 # "in N units"
 # ---------------------------------------------------------------------------
+
 
 def test_in_3_days() -> None:
     assert parse("in 3 days", today=TODAY) == date(2025, 6, 7)
@@ -126,6 +131,7 @@ def test_in_a_year() -> None:
 # "N units ago"
 # ---------------------------------------------------------------------------
 
+
 def test_3_days_ago() -> None:
     assert parse("3 days ago", today=TODAY) == date(2025, 6, 1)
 
@@ -141,6 +147,7 @@ def test_1_month_ago() -> None:
 # ---------------------------------------------------------------------------
 # "N units from <anchor>"
 # ---------------------------------------------------------------------------
+
 
 def test_n_days_from_today() -> None:
     assert parse("5 days from today", today=TODAY) == date(2025, 6, 9)
@@ -158,6 +165,7 @@ def test_3_days_from_yesterday() -> None:
 # Offset from a named date
 # ---------------------------------------------------------------------------
 
+
 def test_days_before_named_date() -> None:
     assert parse("5 days before December 1st, 2025", today=TODAY) == date(2025, 11, 26)
 
@@ -174,6 +182,7 @@ def test_months_before_named_date() -> None:
 # Compound offsets  ("1 year and 2 months after yesterday")
 # ---------------------------------------------------------------------------
 
+
 def test_compound_year_and_month_after_anchor() -> None:
     # 1 year and 2 months after 2025-06-03 → 2026-08-03
     assert parse("1 year and 2 months after yesterday", today=TODAY) == date(2026, 8, 3)
@@ -189,6 +198,7 @@ def test_compound_weeks_and_days_before() -> None:
 # Case / whitespace insensitivity
 # ---------------------------------------------------------------------------
 
+
 def test_case_insensitive() -> None:
     assert parse("NEXT TUESDAY", today=TODAY) == date(2025, 6, 10)
 
@@ -201,6 +211,7 @@ def test_extra_whitespace() -> None:
 # today defaults to date.today() when omitted
 # ---------------------------------------------------------------------------
 
+
 def test_default_today_is_date_today() -> None:
     result = parse("today")
     assert result == date.today()
@@ -209,6 +220,7 @@ def test_default_today_is_date_today() -> None:
 # ---------------------------------------------------------------------------
 # Error handling
 # ---------------------------------------------------------------------------
+
 
 def test_invalid_string_raises() -> None:
     with pytest.raises(ValueError):
