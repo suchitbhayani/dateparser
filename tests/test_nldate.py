@@ -67,6 +67,10 @@ def test_month_first_with_ordinal() -> None:
     assert parse("December 1st, 2025", today=TODAY) == date(2025, 12, 1)
 
 
+def test_month_abbreviation_with_period() -> None:
+    assert parse("Dec. 1, 2025", today=TODAY) == date(2025, 12, 1)
+
+
 def test_month_first_no_ordinal() -> None:
     assert parse("Jan 5 2024", today=TODAY) == date(2024, 1, 5)
 

@@ -301,7 +301,7 @@ def _try_named_date(s: str, today: date) -> date | None:
 def parse(s: str, today: date | None = None) -> date:
     if today is None:
         today = date.today()
-    norm = " ".join(s.strip().lower().split())
+    norm = " ".join(s.strip().lower().replace(".", "").split())
     try:
         result = _parse_inner(norm, today)
         if result:
