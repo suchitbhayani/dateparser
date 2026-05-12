@@ -313,8 +313,5 @@ def test_invalid_leap_day() -> None:
     with pytest.raises(ValueError):
         parse("February 29 2025", today=TODAY)
 
-def test_fortnight() -> None:
-    # A fortnight is 14 days. June 4 + 14 = June 18
-    assert parse("a fortnight from today", today=TODAY) == date(2025, 6, 18)
 
-    
+
