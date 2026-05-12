@@ -15,7 +15,7 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["."]
+pythonpath = ["src"]
 
 [tool.ruff]
 target-version = "py312"
@@ -26,6 +26,8 @@ strict = true
 [dependency-groups]
 dev = [
     "pytest>=9.0.3",
+    "mypy>=1",
+    "ruff>=0.8",
 ]
 
 
