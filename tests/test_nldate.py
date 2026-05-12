@@ -101,6 +101,16 @@ def test_next_wednesday_skips_full_week() -> None:
     assert parse("next Wednesday", today=TODAY) == date(2025, 6, 11)
 
 
+def test_next_friday_same_week() -> None:
+    # From Wednesday, the soonest Friday is two days ahead (not next week's).
+    assert parse("next Friday", today=TODAY) == date(2025, 6, 6)
+
+
+def test_next_friday_from_thursday_is_tomorrow() -> None:
+    thursday = date(2025, 6, 5)
+    assert parse("next Friday", today=thursday) == date(2025, 6, 6)
+
+
 def test_last_monday() -> None:
     # Last Monday from Wed 2025-06-04 → 2025-06-02
     assert parse("last Monday", today=TODAY) == date(2025, 6, 2)
@@ -296,9 +306,9 @@ def test_offset_from_offset_anchor() -> None:
 
 
 def test_offset_from_relative_weekday() -> None:
-    # "next Friday" -> June 13
-    # "3 days after June 13" -> June 16
-    assert parse("3 days after next Friday", today=TODAY) == date(2025, 6, 16)
+    # "next Friday" -> June 6 (same week from Wednesday)
+    # "3 days after June 6" -> June 9
+    assert parse("3 days after next Friday", today=TODAY) == date(2025, 6, 9)
 
 
 def test_word_numbers() -> None:

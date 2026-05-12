@@ -160,58 +160,31 @@ def _try_iso(s: str) -> date | None:
     return date(int(m.group(1)), int(m.group(2)), int(m.group(3))) if m else None
 
 
-def _try_relative_weekday(s: str, today: date) -> date | None:
-    m = _RELATIVE_WEEKDAY_RE.match(s)
-    if not m:
-        return None
-    qual, day_name = m.group(1).lower(), m.group(2).lower()
-    target_wd = WEEKDAYS.get(day_name)
-    if target_wd is None:
-        return None
-
-    curr_wd = today.weekday()
-    if qual == "next":
-        # "next Friday" always moves to the next week's Friday,
-        # even if today is Monday and Friday is 4 days away.
-        days_ahead = (target_wd - curr_wd) % 7
-        if days_ahead == 0:
-            days_ahead = 7
-        return today + timedelta(
-            days=days_ahead + 7
-            if days_ahead < 7 and (target_wd - curr_wd) >= 0
-            else days_ahead
-        )
-
-    # Fallback for "next Friday" standard definition (first Friday after today + 7)
-    # The common NL interpretation: "next X" = skip this week's X.
-    if qual == "next":
-        diff = (target_wd - curr_wd) % 7
-        return today + timedelta(days=diff + 7 if diff >= 0 else diff + 7)
-    if qual == "last":
-        diff = (curr_wd - target_wd) % 7
-        return today - timedelta(days=diff if diff != 0 else 7)
-    return today + timedelta(days=(target_wd - curr_wd) % 7)
-
-
-def _resolve_relative_weekday_strict(
+def _resolve_relative_weekday(
     qual: str, target_wd: int, curr_wd: int, today: date
 ) -> date:
-    diff = target_wd - curr_wd
+    """Resolve 'next/last/this <weekday>' relative to today (Monday=0 .. Sunday=6).
 
+    *next* — the soonest occurrence strictly after *today*; if today is already
+    that weekday, the occurrence one week ahead.
+    *last* — the most recent occurrence strictly before *today*; if today is that
+    weekday, one week ago.
+    *this* — the soonest occurrence on or after *today* (often called 'coming').
+    """
     if qual == "next":
-        result = today + timedelta(days=diff + 7)
-        if result.isocalendar()[1] == today.isocalendar()[1]:
-            result += timedelta(days=7)
-        return result
+        days = (target_wd - curr_wd) % 7
+        if days == 0:
+            days = 7
+        return today + timedelta(days=days)
 
     if qual == "last":
-        if diff < 0:
-            return today + timedelta(days=diff)
-        else:
-            return today + timedelta(days=diff - 7)
+        days_back = (curr_wd - target_wd) % 7
+        if days_back == 0:
+            days_back = 7
+        return today - timedelta(days=days_back)
 
     # "this"
-    days_ahead = diff % 7
+    days_ahead = (target_wd - curr_wd) % 7
     return today + timedelta(days=days_ahead)
 
 
@@ -249,7 +222,7 @@ def _parse_inner(s: str, today: date) -> date | None:
     if m := _RELATIVE_WEEKDAY_RE.match(s):
         qual, day_name = m.groups()
         if (target_wd := WEEKDAYS.get(day_name.lower())) is not None:
-            return _resolve_relative_weekday_strict(
+            return _resolve_relative_weekday(
                 qual.lower(), target_wd, today.weekday(), today
             )
 
