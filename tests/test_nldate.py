@@ -44,6 +44,11 @@ def test_slash_date_single_digit_month_and_day() -> None:
     assert parse("2025/01/05", today=TODAY) == date(2025, 1, 5)
 
 
+def test_slash_date_single_digit_no_leading_zero() -> None:
+    assert parse("2025/12/3", today=TODAY) == date(2025, 12, 3)
+    assert parse("2025/1/5", today=TODAY) == date(2025, 1, 5)
+
+
 def test_slash_date_leap_year() -> None:
     assert parse("2024/02/29", today=TODAY) == date(2024, 2, 29)
 

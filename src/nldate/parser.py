@@ -136,7 +136,7 @@ def _apply_delta(base: date, amount: int, unit: str, direction: int) -> date:
 # ---------------------------------------------------------------------------
 
 _ANCHOR_RE = re.compile(r"^(today|tomorrow|yesterday|now)$", re.I)
-_ISO_RE = re.compile(r"^(\d{4})[-/](\d{2})[-/](\d{2})$")
+_ISO_RE = re.compile(r"^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$")
 _NAMED_DATE1_RE = re.compile(
     r"^(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+),?\s*(\d{4})?$", re.I
 )
