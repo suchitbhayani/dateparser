@@ -36,6 +36,28 @@ def test_iso_date() -> None:
     assert parse("2025-12-01", today=TODAY) == date(2025, 12, 1)
 
 
+def test_slash_date_yyyy_mm_dd() -> None:
+    assert parse("2025/12/04", today=TODAY) == date(2025, 12, 4)
+
+
+def test_slash_date_single_digit_month_and_day() -> None:
+    assert parse("2025/01/05", today=TODAY) == date(2025, 1, 5)
+
+
+def test_slash_date_leap_year() -> None:
+    assert parse("2024/02/29", today=TODAY) == date(2024, 2, 29)
+
+
+def test_slash_date_invalid_month_raises() -> None:
+    with pytest.raises(ValueError):
+        parse("2025/13/01", today=TODAY)
+
+
+def test_slash_date_invalid_leap_day_raises() -> None:
+    with pytest.raises(ValueError):
+        parse("2025/02/29", today=TODAY)
+
+
 def test_month_first_with_ordinal() -> None:
     assert parse("December 1st, 2025", today=TODAY) == date(2025, 12, 1)
 
