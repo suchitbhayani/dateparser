@@ -1,7 +1,31 @@
 [project]
-name = "dateparser"
+name = "nldate"
 version = "0.1.0"
-description = "Add your description here"
+description = "Natural-language date parser"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "mypy>=1",
+    "ruff>=0.8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.mypy]
+strict = true
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
+
+
