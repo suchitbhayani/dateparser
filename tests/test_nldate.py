@@ -261,6 +261,12 @@ def test_invalid_string_raises() -> None:
 ###
 
 
+def test_this_friday_from_sunday_returns_upcoming() -> None:
+    # "this Friday" from Sunday should not go backwards
+    SUNDAY = date(2025, 6, 1)
+    assert parse("this Friday", today=SUNDAY) == date(2025, 6, 6)
+
+
 def test_this_wednesday_on_wednesday() -> None:
     # If today is Wednesday, "this Wednesday" should usually mean today.
     assert parse("this Wednesday", today=TODAY) == TODAY

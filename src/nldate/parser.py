@@ -199,20 +199,20 @@ def _resolve_relative_weekday_strict(
     diff = target_wd - curr_wd
 
     if qual == "next":
-        # If the day is later this week, "next" means next week (+7).
-        # If the day already passed, "next" means the one coming up (+0 effectively, but diff is neg).
-        return today + timedelta(days=diff + 7)
+        result = today + timedelta(days=diff + 7)
+        if result.isocalendar()[1] == today.isocalendar()[1]:
+            result += timedelta(days=7)
+        return result
 
     if qual == "last":
-        # If the day already happened this week (diff < 0), "last" means that day.
-        # If the day hasn't happened yet (diff >= 0), "last" means the one from a week ago.
         if diff < 0:
             return today + timedelta(days=diff)
         else:
             return today + timedelta(days=diff - 7)
 
     # "this"
-    return today + timedelta(days=diff)
+    days_ahead = diff % 7
+    return today + timedelta(days=days_ahead)
 
 
 def _try_offset(s: str, today: date) -> date | None:
