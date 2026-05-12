@@ -226,92 +226,113 @@ def test_invalid_string_raises() -> None:
     with pytest.raises(ValueError):
         parse("not a date at all", today=TODAY)
 
+
 ###
+
 
 def test_this_wednesday_on_wednesday() -> None:
     # If today is Wednesday, "this Wednesday" should usually mean today.
     assert parse("this Wednesday", today=TODAY) == TODAY
 
+
 def test_last_wednesday_on_wednesday() -> None:
     # If today is Wednesday, "last Wednesday" should be exactly 7 days ago.
     assert parse("last Wednesday", today=TODAY) == date(2025, 5, 28)
+
 
 def test_leap_year_rollover() -> None:
     # 1 year after Feb 29, 2024 should safely land on Feb 28, 2025.
     ref = date(2024, 2, 29)
     assert parse("in 1 year", today=ref) == date(2025, 2, 28)
 
+
 def test_month_end_math() -> None:
     # Jan 31 + 1 month should resolve to the last day of February.
     ref = date(2025, 1, 31)
     assert parse("in 1 month", today=ref) == date(2025, 2, 28)
+
 
 def test_offset_from_offset_anchor() -> None:
     # "tomorrow" -> June 5
     # "2 days before June 5" -> June 3
     assert parse("2 days before tomorrow", today=TODAY) == date(2025, 6, 3)
 
+
 def test_offset_from_relative_weekday() -> None:
     # "next Friday" -> June 13
     # "3 days after June 13" -> June 16
     assert parse("3 days after next Friday", today=TODAY) == date(2025, 6, 16)
 
+
 def test_word_numbers() -> None:
     assert parse("three weeks ago", today=TODAY) == date(2025, 5, 14)
+
 
 def test_filler_words_and_articles() -> None:
     # "a" or "an" should be treated as 1
     assert parse("in a week", today=TODAY) == date(2025, 6, 11)
     assert parse("about 2 days from now", today=TODAY) == date(2025, 6, 6)
 
-@pytest.mark.parametrize("invalid_input", [
-    "last tomorrow",            # Logical contradiction
-    "January 32 2025",          # Impossible date
-    "yesterday today",          # Conflicting anchors
-    "3 fortnights before now",  # Unsupported units (usually)
-])
+
+@pytest.mark.parametrize(
+    "invalid_input",
+    [
+        "last tomorrow",  # Logical contradiction
+        "January 32 2025",  # Impossible date
+        "yesterday today",  # Conflicting anchors
+        "3 fortnights before now",  # Unsupported units (usually)
+    ],
+)
 def test_nonsense_inputs_raise_value_error(invalid_input: str) -> None:
     with pytest.raises(ValueError):
         parse(invalid_input, today=TODAY)
 
+
 def test_compound_year_month_day() -> None:
     # 1 year (to 2026-06-04) + 1 month (to 2026-07-04) + 1 day = 2026-07-05
-    assert parse("1 year, 1 month, and 1 day after today", today=TODAY) == date(2026, 7, 5)
+    assert parse("1 year, 1 month, and 1 day after today", today=TODAY) == date(
+        2026, 7, 5
+    )
+
 
 def test_compound_negative_offset() -> None:
     # 2 weeks (14 days) and 3 days = 17 days ago
     # June 4 - 17 days = May 18
     assert parse("2 weeks and 3 days ago", today=TODAY) == date(2025, 5, 18)
 
+
 def test_ordinal_of_month() -> None:
     assert parse("the 15th of March", today=TODAY) == date(2025, 3, 15)
     assert parse("22nd of June 2025", today=TODAY) == date(2025, 6, 22)
+
 
 def test_ordinal_standalone_current_month() -> None:
     # If today is June 4, "the 20th" should imply June 20th
     assert parse("the 20th", today=TODAY) == date(2025, 6, 20)
 
+
 def test_year_boundary_relative() -> None:
     # Today is June 2025. "In 7 months" should cross into 2026.
     assert parse("in 7 months", today=TODAY) == date(2026, 1, 4)
 
+
 def test_last_day_of_year() -> None:
     ref = date(2025, 12, 31)
     assert parse("tomorrow", today=ref) == date(2026, 1, 1)
+
 
 def test_shorthand_units() -> None:
     # Handling 'yr' for year or 'mo' for month
     assert parse("in 1 yr", today=TODAY) == date(2026, 6, 4)
     assert parse("2 mos ago", today=TODAY) == date(2025, 4, 4)
 
+
 def test_ago_with_from_now() -> None:
     # 'from now' is a common synonym for 'in' or 'after today'
     assert parse("3 days from now", today=TODAY) == date(2025, 6, 7)
+
 
 def test_invalid_leap_day() -> None:
     # 2025 is not a leap year.
     with pytest.raises(ValueError):
         parse("February 29 2025", today=TODAY)
-
-
-
